@@ -1,0 +1,16 @@
+# --- ANGULAR (Frontend) ---
+node_modules/
+dist/
+.angular/
+.vscode/
+package-lock.json
+
+# --- .NET (Backend) ---
+bin/
+obj/
+.vs/
+*.user
+*.pdb
+
+.DS_Store
+Thumbs.db

@@ -1,0 +1,104 @@
+<div class="max-w-xl mx-auto mt-10 p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
+  
+  <h2 class="text-3xl font-extrabold mb-8 text-gray-800 border-b pb-4">
+    {{ isEditMode ? 'Edit Movie' : 'New Movie' }}
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    
+    <div class="mb-5">
+      <label class="block text-gray-700 text-sm font-bold mb-2">Movie Name</label>
+      <input type="text" formControlName="name"
+        class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white focus:outline-none transition-all duration-200"
+        placeholder="Eg. Interstellar">
+
+      @if (form.get('name')?.invalid && form.get('name')?.touched) {
+        <span class="text-red-500 text-xs font-bold mt-1 block">
+          Name is required
+        </span>
+      }
+    </div>
+
+    <div class="mb-5">
+      <label class="block text-gray-700 text-sm font-bold mb-2">Gender</label>
+      <input type="text" formControlName="gender"
+        class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white focus:outline-none transition-all duration-200"
+        placeholder="Eg. Sci-Fi">
+    </div>
+
+    <div class="flex gap-6 mb-5">
+      
+      <div class="w-1/2">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Release Year</label>
+        <div class="relative">
+          <input type="date" formControlName="releaseYear"
+            class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white focus:outline-none transition-all duration-200">
+        </div>
+      </div>
+      
+      <div class="w-1/2">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Duration</label>
+        
+        <div class="flex items-center gap-3">
+          
+          <div class="relative w-1/2 group">
+            <input type="number" formControlName="hours" min="0"
+              class="w-full h-12 pl-3 pr-8 rounded-lg bg-gray-50 border border-gray-200 text-xl font-bold text-gray-700 text-center focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white focus:outline-none transition-all duration-200 placeholder-transparent">
+            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 tracking-wider group-hover:text-blue-400 transition-colors cursor-default">
+              HRS
+            </span>
+          </div>
+
+          <span class="text-xl font-black text-gray-300 pb-1">:</span>
+
+          <div class="relative w-1/2 group">
+            <input type="number" formControlName="minutes" min="0" max="59"
+              class="w-full h-12 pl-3 pr-8 rounded-lg bg-gray-50 border border-gray-200 text-xl font-bold text-gray-700 text-center focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white focus:outline-none transition-all duration-200 placeholder-transparent">
+            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 tracking-wider group-hover:text-blue-400 transition-colors cursor-default">
+              MIN
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <label class="block text-gray-700 text-sm font-bold mb-2">Director</label>
+      <div class="relative">
+        <select formControlName="fkIdDirector"
+          class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white focus:outline-none transition-all duration-200 appearance-none cursor-pointer">
+          <option value="">Select Director</option>
+          
+          @for (director of directors(); track director.idDirector) {
+            <option [value]="director.idDirector">
+              {{ director.name }}
+            </option>
+          }
+          
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+          <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+      </div>
+      @if (form.get('fkIdDirector')?.invalid && form.get('fkIdDirector')?.touched) {
+        <span class="text-red-500 text-xs font-bold mt-1 block">
+          Please select a director
+        </span>
+      }
+    </div>
+
+    <div class="flex items-center justify-end gap-3 mt-8 border-t pt-6">
+      <a routerLink="/" 
+         class="px-6 py-2.5 rounded-lg text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all duration-200">
+        Cancel
+      </a>
+      
+      <button type="submit" [disabled]="form.invalid"
+        class="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
+        {{ isEditMode ? 'Update Movie' : 'Save Movie' }}
+      </button>
+    </div>
+
+  </form>
+</div>

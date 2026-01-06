@@ -1,0 +1,96 @@
+<div class="container mx-auto p-6">
+  
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Director List</h1>
+    
+    <a routerLink="/directors/create" 
+       class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow transition-colors">
+       Add New Director
+    </a>
+  </div>
+
+  <div class="overflow-x-auto bg-white shadow-lg rounded-lg border border-gray-200">
+    <table class="min-w-full leading-normal">
+      <thead class="bg-gray-900 text-white">
+        <tr>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">ID</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Nationality</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Age</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-center text-xs font-semibold uppercase tracking-wider">Status</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-center text-xs font-semibold uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        @if (isLoading()) {
+          <tr>
+            <td colspan="6" class="py-10 text-center bg-white">
+              <div class="flex flex-col justify-center items-center gap-3">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-4 border-blue-600"></div>
+                <span class="text-gray-500 font-bold text-sm animate-pulse">Loading directors...</span>
+              </div>
+            </td>
+          </tr>
+        } @else {
+          
+          @for (director of directors(); track director.idDirector) {
+            <tr class="hover:bg-gray-50 border-b border-gray-200 transition duration-150">
+              
+              <td class="px-5 py-4 text-sm text-gray-500">
+                #{{ director.idDirector }}
+              </td>
+
+              <td class="px-5 py-4 text-sm font-bold text-gray-900">
+                {{ director.name }}
+              </td>
+              
+              <td class="px-5 py-4 text-sm text-gray-600">
+                {{ director.nationality }}
+              </td>
+
+              <td class="px-5 py-4 text-sm text-gray-600">
+                {{ director.age }} years
+              </td>
+
+              <td class="px-5 py-4 text-sm text-center">
+                @if (director.isActive) {
+                  <span class="bg-green-100 text-green-800 py-1 px-3 rounded-full text-xs font-bold shadow-sm">
+                    Active
+                  </span>
+                } @else {
+                  <span class="bg-red-100 text-red-800 py-1 px-3 rounded-full text-xs font-bold shadow-sm">
+                    Inactive
+                  </span>
+                }
+              </td>
+              
+              <td class="px-5 py-4 text-sm text-center">
+                <div class="flex justify-center gap-2">
+                  <a [routerLink]="['/directors/edit', director.idDirector]" 
+                     class="text-yellow-600 hover:text-yellow-900 font-bold cursor-pointer border border-yellow-200 bg-yellow-50 px-3 py-1 rounded hover:bg-yellow-100 transition">
+                     Edit
+                  </a>
+                  
+                  <button (click)="deleteDirector(director.idDirector)" 
+                          class="text-red-600 hover:text-red-900 font-bold border border-red-200 bg-red-50 px-3 py-1 rounded hover:bg-red-100 transition">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="px-5 py-10 text-center text-gray-500 bg-gray-50">
+                <div class="flex flex-col items-center">
+                  <p>No directors found.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        }
+
+      </tbody>
+    </table>
+  </div>
+</div>

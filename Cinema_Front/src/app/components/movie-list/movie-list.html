@@ -1,0 +1,98 @@
+<div class="container mx-auto p-6">
+  
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Movie List</h1>
+    
+    <a routerLink="/create" 
+       class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow transition-colors">
+       Add New Movie
+    </a>
+  </div>
+
+  <div class="overflow-x-auto bg-white shadow-lg rounded-lg border border-gray-200">
+    <table class="min-w-full leading-normal">
+      <thead class="bg-gray-900 text-white">
+        <tr>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">ID</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Movie</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Director</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Year</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Duration</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">Gender</th>
+          <th class="px-5 py-3 border-b-2 border-gray-200 text-center text-xs font-semibold uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        @if (isLoading()) {
+          <tr>
+            <td colspan="7" class="py-10 text-center bg-white">
+              <div class="flex flex-col justify-center items-center gap-3">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-4 border-blue-600"></div>
+                <span class="text-gray-500 font-bold text-sm animate-pulse">Loading movies...</span>
+              </div>
+            </td>
+          </tr>
+        } @else {
+          
+          @for (movie of movies(); track movie.idMovie) {
+            <tr class="hover:bg-gray-50 border-b border-gray-200 transition duration-150">
+              
+              <td class="px-5 py-4 text-sm text-gray-500">
+                #{{ movie.idMovie }}
+              </td>
+
+              <td class="px-5 py-4 text-sm font-bold text-gray-900">
+                {{ movie.name }}
+              </td>
+              
+              <td class="px-5 py-4 text-sm text-gray-600">
+                {{ movie.fkIdDirectorNavigation?.name || 'Unknown' }}
+              </td>
+
+              <td class="px-5 py-4 text-sm text-gray-600">
+                <span class="bg-gray-100 text-gray-800 py-1 px-3 rounded-full text-xs font-semibold">
+                  {{ movie.releaseYear | date:'yyyy' }}
+                </span>
+              </td>
+
+              <td class="px-5 py-4 text-sm text-gray-600">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span class="font-medium font-mono">{{ movie.duration.slice(0, 5) }} hrs</span>
+                </div>
+              </td>
+              
+              <td class="px-5 py-4 text-sm text-gray-600">
+                {{ movie.gender }}
+              </td>
+              
+              <td class="px-5 py-4 text-sm text-center">
+                <div class="flex justify-center gap-2">
+                  <a [routerLink]="['/edit', movie.idMovie]" 
+                     class="text-yellow-600 hover:text-yellow-900 font-bold cursor-pointer border border-yellow-200 bg-yellow-50 px-3 py-1 rounded hover:bg-yellow-100 transition">
+                     Edit
+                  </a>
+                  
+                  <button (click)="deleteMovie(movie.idMovie)" 
+                          class="text-red-600 hover:text-red-900 font-bold border border-red-200 bg-red-50 px-3 py-1 rounded hover:bg-red-100 transition">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="px-5 py-10 text-center text-gray-500 bg-gray-50">
+                <div class="flex flex-col items-center">
+                  <p>No movies found.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        }
+
+      </tbody>
+    </table>
+  </div>
+</div>
